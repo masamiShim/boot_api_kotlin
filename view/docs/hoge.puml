@@ -1,0 +1,11 @@
+@startuml
+
+storage state
+storage setState
+storage view
+
+state --> view: 参照
+view -right-> setState: 発火
+setState -left-> state: 更新
+
+@enduml
