@@ -1,0 +1,261 @@
+@startuml
+
+/'
+  図の中で目立たせたいエンティティに着色するための
+  色の名前（定数）を定義します。
+'/
+!define MAIN_ENTITY #E2EFDA-C6E0B4
+!define MAIN_ENTITY_2 #FCE4D6-F8CBAD
+
+/' 他の色も、用途が分りやすいように名前をつけます。 '/
+!define METAL #F2F2F2-D9D9D9
+!define MASTER_MARK_COLOR AAFFAA
+!define TRANSACTION_MARK_COLOR FFAA00
+!define ATODE_MARK_COLOR CC00AA
+
+/'
+  デフォルトのスタイルを設定します。
+  この場合の指定は class です。entity ではエラーになります。
+'/
+skinparam class {
+    BackgroundColor METAL
+    BorderColor Black
+    ArrowColor Black
+}
+
+package "ユーザ管理" as user_management {
+    entity "管理ユーザ" as manager <<M,MASTER_MARK_COLOR>> {
+        + 管理ユーザID [PK]
+        --
+        FAX
+    }
+
+    entity "ゲストユーザ" as guest <<M,MASTER_MARK_COLOR>> {
+        + ゲストユーザID [PK]
+        --
+        顧客名
+        郵便番号
+        住所
+        電話番号
+        FAX
+    }
+    entity "ゲストユーザ情報" as guest_information <<M,MASTER_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # ゲストユーザID
+        郵便番号
+        住所
+        電話番号
+        FAX
+    }
+    entity "ホストユーザ" as host <<M,MASTER_MARK_COLOR>> {
+        + 顧客ID [PK]
+        --
+        顧客名
+        郵便番号
+        住所
+        電話番号
+        FAX
+    }
+    entity "ホストユーザ情報" as host_information <<M,MASTER_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # ホストユーザID
+        郵便番号
+        住所
+        電話番号
+        FAX
+    }
+}
+guest_information        }-do-||      guest
+host_information        }-do-||      host
+
+
+package "ブログ管理" as blog_management {
+    entity "ブログ" as blog <<M,MASTER_MARK_COLOR>> {
+        + ID [PK]
+        --
+        ブログ名
+    }
+
+    entity "ブログ" as blog <<M,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        ブログ名
+    }
+
+    entity "投稿" as post <<T,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # ブログID
+    }
+
+    entity "関連_投稿_カテゴリー" as r_post_category <<T,ATODE_MARK_COLOR>> {
+        # 投稿ID [FK]
+        # カテゴリーID [FK, UK]
+    }
+
+    entity "カテゴリー" as blog_category <<M,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        カテゴリー名
+    }
+
+    entity "コメント" as comment <<T,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 投稿ID
+        投稿者
+    }
+}
+manager        }-do-||      post
+post        }-do-||      blog
+post        }-do-{      r_post_category
+blog_category  }-do-{      r_post_category
+comment        }-do-||      post
+
+package "部屋単価管理" as price_management {
+    entity "単価" as price <<M,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 部屋ID
+        # 日付
+        単価
+    }
+
+    entity "単価テーブル" as price_table <<T,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # ブログID
+        # 単価
+    }
+
+    entity "関連_単価テーブル_カテゴリー" as r_post_category <<T,ATODE_MARK_COLOR>> {
+        # 投稿ID [FK]
+        # カテゴリーID [FK, UK]
+    }
+}
+
+package "物件管理" as building_management {
+    entity "物件" as building <<M,MASTER_MARK_COLOR>> {
+        + 物件ID [PK]
+        --
+        原産国
+        # 仕入先ID [FK]
+    }
+
+    entity "関連_物件_属性" as r_building_attribute <<T,MASTER_MARK_COLOR>> {
+        # 物件ID [FK]
+        # 属性ID [FK, UK]
+    }
+
+    entity "物件属性" as building_attribute <<M,MASTER_MARK_COLOR>> {
+        + ID [PK]
+        --
+        属性名
+    }
+
+    entity "物件画像" as building_image <<M,MASTER_MARK_COLOR>> {
+        + 画像ID [PK]
+        --
+        画像URL
+        # 物件ID [FK]
+    }
+
+    entity "部屋" as building_room <<M,MASTER_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 物件ID [PK]
+        部屋タイプ
+        部屋グレード
+    }
+
+    entity "部屋画像" as room_image <<M,MASTER_MARK_COLOR>> {
+        + 画像ID [PK]
+        --
+        画像URL
+        # 部屋ID [FK]
+    }
+
+    entity "部屋_グレード" as room_grade <<M,ATODE_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 部屋ID
+    }
+
+}
+building        }-do-||      host
+building        }-do-{      r_building_attribute
+building_attribute        }-do-{      r_building_attribute
+building_image  }-do-||      building
+building_room   }-do-||      building
+room_image   }-do-||      building_room
+
+
+package "チャット管理" as chat_management {
+    entity "チャットルーム" as chat_room <<T,TRANSACTION_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 物件ID
+        # ゲストID
+
+    }
+
+    /'
+     これはシングルテーブル戦略使う？
+    '/
+    entity "チャットトーク" as chat_talk <<T,TRANSACTION_MARK_COLOR>> {
+        + トークID [PK]
+        --
+        発信元(ゲスト or ホスト)
+        # ID
+        # ルームID
+        送信日時
+    }
+}
+host    }-do-||     chat_room
+guest   }-do-||     chat_room
+chat_talk        }o-le-||     chat_room
+note bottom of chat_talk : シングルテーブル戦略使う？
+
+
+package "予約管理" as reserve_management<<Database>> {
+
+    entity "予約管理" as reserve_management <<T,TRANSACTION_MARK_COLOR>> {
+        + ID [PK]
+        # 予約日
+        --
+        # 部屋ID
+        # 期間[UK]
+        # 期間[UK]
+    }
+
+    entity "予約明細" as reserve <<T,TRANSACTION_MARK_COLOR>> {
+        + ID [PK]
+        --
+        # 予約日[UK]
+        # 部屋ID[UK]
+        # 物件ID[UK]
+    }
+}
+reserve_management }-do-|| building_room
+reserve_management   ||-do-{    reserve
+note bottom of reserve_management : ここはNoSQLでもよいかも
+
+
+package "決済管理" as transaction_management<<Database>> {
+
+    entity "決済" as transaction <<T,TRANSACTION_MARK_COLOR>> {
+        + ID [PK]
+        --
+        決済日
+        決済ステータス
+        支払ステータス
+        請求ステータス
+    }
+}
+
+reserve_management ||-do-|| transaction
+
+
+@enduml
