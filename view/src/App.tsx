@@ -1,13 +1,23 @@
-import React, {useState} from 'react';
-import './App.css';
-import Increment from './component/stateless/Increment';
+import React from 'react';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+import Top from './component/page/Top';
+import Header from './component/container/Header';
+import Contact from "./component/page/Contact";
+import Footer from "./component/container/Footer";
 
 const App: React.FC = () => {
-    const [count, setCount] = useState(0);
     return (
-        <div className="App">
-            <h1>{count}</h1>
-            <Increment count={count} setCount={setCount}>INCLEMENT</Increment>
+        <div>
+            <BrowserRouter>
+                <div className='h-16 sticky'>
+                    <Header/>
+                </div>
+                <div>
+                    <Route exact path='/' component={Top}/>
+                    <Route exact path='/contact' component={Contact}/>
+                </div>
+                <Footer/>
+            </BrowserRouter>
         </div>
     );
 };
