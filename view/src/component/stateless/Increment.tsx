@@ -11,7 +11,7 @@ const Increment: React.FC<Props> = (props: Props) => {
     }
 
     return (
-        <button onClick={clickEventHandler}>INCREMENT</button>
+        <button className={'border border-gray-200 px-8'} onClick={clickEventHandler}>INCREMENT</button>
     )
 };
 

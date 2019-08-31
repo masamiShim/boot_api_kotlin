@@ -27,17 +27,16 @@ package "ユーザ管理" as user_management {
     entity "管理ユーザ" as manager <<M,MASTER_MARK_COLOR>> {
         + 管理ユーザID [PK]
         --
-        FAX
+        PASSWORD[varchar(256)]
+        NAME[varchar(256)]
+        EMAIL[varchar(256)]
     }
 
-    entity "ゲストユーザ" as guest <<M,MASTER_MARK_COLOR>> {
+    entity "ゲストユーザ" as guest_user <<M,MASTER_MARK_COLOR>> {
         + ゲストユーザID [PK]
         --
-        顧客名
-        郵便番号
-        住所
-        電話番号
-        FAX
+        NICK_NAME[varchar(256)]
+        EMAIL[varchar(256)]
     }
     entity "ゲストユーザ情報" as guest_information <<M,MASTER_MARK_COLOR>> {
         + ID [PK]
@@ -51,23 +50,17 @@ package "ユーザ管理" as user_management {
     entity "ホストユーザ" as host <<M,MASTER_MARK_COLOR>> {
         + 顧客ID [PK]
         --
-        顧客名
-        郵便番号
-        住所
-        電話番号
-        FAX
+        NICK_NAME[varchar(256)]
+        EMAIL[varchar(256)]
     }
     entity "ホストユーザ情報" as host_information <<M,MASTER_MARK_COLOR>> {
         + ID [PK]
         --
         # ホストユーザID
-        郵便番号
-        住所
         電話番号
-        FAX
     }
 }
-guest_information        }-do-||      guest
+guest_information        }-do-||      guest_user
 host_information        }-do-||      host
 
 
@@ -136,33 +129,33 @@ package "部屋単価管理" as price_management {
     }
 }
 
-package "物件管理" as building_management {
-    entity "物件" as building <<M,MASTER_MARK_COLOR>> {
+package "物件管理" as property_management {
+    entity "物件" as property <<M,MASTER_MARK_COLOR>> {
         + 物件ID [PK]
         --
         原産国
         # 仕入先ID [FK]
     }
 
-    entity "関連_物件_属性" as r_building_attribute <<T,MASTER_MARK_COLOR>> {
+    entity "関連_物件_属性" as r_property_attribute <<T,MASTER_MARK_COLOR>> {
         # 物件ID [FK]
         # 属性ID [FK, UK]
     }
 
-    entity "物件属性" as building_attribute <<M,MASTER_MARK_COLOR>> {
+    entity "物件属性" as property_attribute <<M,MASTER_MARK_COLOR>> {
         + ID [PK]
         --
         属性名
     }
 
-    entity "物件画像" as building_image <<M,MASTER_MARK_COLOR>> {
+    entity "物件画像" as property_image <<M,MASTER_MARK_COLOR>> {
         + 画像ID [PK]
         --
         画像URL
         # 物件ID [FK]
     }
 
-    entity "部屋" as building_room <<M,MASTER_MARK_COLOR>> {
+    entity "部屋" as property_room <<M,MASTER_MARK_COLOR>> {
         + ID [PK]
         --
         # 物件ID [PK]
@@ -184,12 +177,12 @@ package "物件管理" as building_management {
     }
 
 }
-building        }-do-||      host
-building        }-do-{      r_building_attribute
-building_attribute        }-do-{      r_building_attribute
-building_image  }-do-||      building
-building_room   }-do-||      building
-room_image   }-do-||      building_room
+property        }-do-||      host
+property        }-do-{      r_property_attribute
+property_attribute        }-do-{      r_property_attribute
+property_image  }-do-||      property
+property_room   }-do-||      property
+room_image   }-do-||      property_room
 
 
 package "チャット管理" as chat_management {
@@ -214,7 +207,7 @@ package "チャット管理" as chat_management {
     }
 }
 host    }-do-||     chat_room
-guest   }-do-||     chat_room
+guest_user   }-do-||     chat_room
 chat_talk        }o-le-||     chat_room
 note bottom of chat_talk : シングルテーブル戦略使う？
 
@@ -238,7 +231,7 @@ package "予約管理" as reserve_management<<Database>> {
         # 物件ID[UK]
     }
 }
-reserve_management }-do-|| building_room
+reserve_management }-do-|| property_room
 reserve_management   ||-do-{    reserve
 note bottom of reserve_management : ここはNoSQLでもよいかも
 

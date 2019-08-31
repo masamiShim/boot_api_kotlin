@@ -9,22 +9,25 @@ import SignIn from "./component/page/SignIn";
 import Auth from "./component/page/Auth";
 
 const App: React.FC = () => {
+    const visible: boolean = false;
     return (
         <div>
             <BrowserRouter>
-                <div className='h-16 sticky'>
-                    <Header/>
-                </div>
                 <div>
+                    {
+                        visible ? <div className='h-16 sticky'> <Header/> </div> : <div className='h-16 sticky'> </div>
+                    }
                     <Switch>
-                        <Route exact path='/login' component={Login}/>
-                        <Route exact path='/signIn' component={SignIn}/>
                         <Auth>
                             <Switch>
+                                <Route exact path='/signIn' component={SignIn}/>
+                                <Route exact path='/login' component={Login}/>
                                 <Route exact path='/top' component={Top}/>
                                 <Route exact path='/contact' component={Contact}/>
                             </Switch>
-                            <Footer/>
+                            {
+                                visible ? <Footer/> : <div> </div>
+                            }
                         </Auth>
                     </Switch>
                 </div>

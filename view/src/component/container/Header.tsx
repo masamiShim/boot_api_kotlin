@@ -12,17 +12,13 @@ const Header: React.FC = () => {
             <nav className='w-3/4'>
                 <Switch>
                     <ul className="justify-end flex">
-                        <li className="align-middle">
-                            <NavItem text="Login" linkTo="/login"/>
-                        </li>
-                        <li>
-                            <NavItem text="SignIn" linkTo="/signIn"/>
-                        </li>
                         <Auth>
                             <Switch>
                                 <li className="align-middle">
                                     <NavItem text="Home" linkTo="/"/>
                                 </li>
+                            </Switch>
+                            <Switch>
                                 <li>
                                     <NavItem text="Contact" linkTo="/contact"/>
                                 </li>

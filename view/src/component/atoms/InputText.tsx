@@ -12,7 +12,7 @@ const InputText: React.FC<Props> = (props) => {
     };
     return (
         <div>
-            <label className="text-gray-300">{props.label}</label>
+            <label className="text-gray-600">{props.label}</label>
             <input
                 className="appearance-none border-2 border-gray-400 rounded w-full mt-1 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-300"
                 type="text" onChange={onChangeValue}/>

@@ -6,11 +6,11 @@ const Auth: React.FC = (props: SwitchProps) => {
         signIn: true
     };
     return (
-        <div>
+        <span>
             {
                 user.signIn ? props.children : <Redirect to={'/login'} />
             }
-        </div>
+        </span>
     )
 };
 
