@@ -41,8 +41,7 @@ const Login: React.FC<RouteComponentProps> = (props) => {
         }
 
         props.history.push('/top')
-    }
-
+    };
 
     return (
         <div className='w-1/2 mx-auto my-auto shadow p-8'>
