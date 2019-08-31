@@ -1,6 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Switch} from 'react-router-dom';
 import NavItem from "../atoms/NavItem";
+import Auth from "../page/Auth";
 
 const Header: React.FC = () => {
     return (
@@ -9,14 +10,26 @@ const Header: React.FC = () => {
                 logo
             </span>
             <nav className='w-3/4'>
-                <ul className="justify-end flex">
-                    <li className="align-middle">
-                        <NavItem text="Home" linkTo="/" />
-                    </li>
-                    <li>
-                        <NavItem text="Contact" linkTo="/contact" />
-                    </li>
-                </ul>
+                <Switch>
+                    <ul className="justify-end flex">
+                        <li className="align-middle">
+                            <NavItem text="Login" linkTo="/login"/>
+                        </li>
+                        <li>
+                            <NavItem text="SignIn" linkTo="/signIn"/>
+                        </li>
+                        <Auth>
+                            <Switch>
+                                <li className="align-middle">
+                                    <NavItem text="Home" linkTo="/"/>
+                                </li>
+                                <li>
+                                    <NavItem text="Contact" linkTo="/contact"/>
+                                </li>
+                            </Switch>
+                        </Auth>
+                    </ul>
+                </Switch>
             </nav>
         </header>
     )

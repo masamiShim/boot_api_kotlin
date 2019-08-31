@@ -2,8 +2,10 @@ import React from 'react';
 
 const Login: React.FC = () => {
   return (
-      <form>
-
-      </form>
+      <div>
+            login
+      </div>
   )
 };
+
+export default Login;
