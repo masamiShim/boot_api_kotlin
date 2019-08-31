@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactNode} from 'react';
+import React from 'react';
 import {Redirect, SwitchProps} from 'react-router-dom';
 
 const Auth: React.FC = (props: SwitchProps) => {
